@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# exit codes for fzf
+TOTP_FZF_NORMAL_EXIT=0
+TOTP_FZF_NO_MATCH=1
+TOTP_FZF_ERROR=2
+TOTP_FZF_INTERRUPTED=130
+
+# Combine all arguments into a single space-separated argument
+all_args="$*"
+
+matched_service_name=$(2fa -list | dos2unix | fzf --select-1 --exit-0 --query "$all_args")
+fzf_exit_code=$?
+
+if [ "$fzf_exit_code" = "$TOTP_FZF_INTERRUPTED" ]; then
+  exit 0
+elif [ "$fzf_exit_code" = "$TOTP_FZF_NORMAL_EXIT" ]; then
+  echo "$matched_service_name"
+  2fa "$matched_service_name"
+else
+  2fa
+fi
+

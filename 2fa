@@ -1,0 +1,1 @@
+ docker run --rm -it -v "${HOME}/.2fa:/root/.2fa" aryan02420/2fa "$@"
