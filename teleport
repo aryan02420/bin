@@ -1,0 +1,22 @@
+#!/bin/bash
+## Teleport -- Instantly access shells in running Docker containers
+
+# exit codes for fzf
+TOTP_FZF_NORMAL_EXIT=0
+TOTP_FZF_NO_MATCH=1
+TOTP_FZF_ERROR=2
+TOTP_FZF_INTERRUPTED=130
+
+container=$(docker ps --format="{{.ID}} {{.Names}} {{.Image}}" | fzf --select-1 --exit-0)
+
+fzf_exit_code=$?
+
+if [ "$fzf_exit_code" = "$TOTP_FZF_INTERRUPTED" ]; then
+  exit 0
+elif [ "$fzf_exit_code" = "$TOTP_FZF_NORMAL_EXIT" ]; then
+	container_id=$(echo "$container"| cut -d" " -f1)
+	echo "Teleporting you inside container $container..."
+  docker exec -it --user "${UID}" $container_id bash
+else
+	echo "No running container to teleport into."
+fi
