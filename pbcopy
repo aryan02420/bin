@@ -1,1 +1,8 @@
-xclip -sel clip
+#!/bin/bash
+
+if [ "$XDG_SESSION_DESKTOP" = "KDE" ]; then
+  stdIn=$(</dev/stdin)
+	qdbus6 org.kde.klipper /klipper org.kde.klipper.klipper.setClipboardContents "$stdIn" 
+else
+	xclip -sel clip
+fi

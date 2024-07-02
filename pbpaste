@@ -1,1 +1,8 @@
-xclip -o -sel clip
+#!/bin/bash
+
+if [ "$XDG_SESSION_DESKTOP" = "KDE" ]; then
+	qdbus6 org.kde.klipper /klipper org.kde.klipper.klipper.getClipboardContents
+else
+	xclip -o -sel clip
+fi
+
