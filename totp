@@ -14,10 +14,12 @@ fzf_exit_code=$?
 
 if [ "$fzf_exit_code" = "$TOTP_FZF_INTERRUPTED" ]; then
   exit 0
+elif [ "$fzf_exit_code" = "$TOTP_FZF_NO_MATCH" ]; then
+	echo "No match found for query '$all_args'. Available Keys:" >&2
+	2fa -list >&2
 elif [ "$fzf_exit_code" = "$TOTP_FZF_NORMAL_EXIT" ]; then
-  echo "$matched_service_name"
+  echo "$matched_service_name" >&2
   2fa "$matched_service_name"
 else
   2fa
 fi
-
